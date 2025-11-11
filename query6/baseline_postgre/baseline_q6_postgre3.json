@@ -1,0 +1,32 @@
+[
+  {
+    "QUERY PLAN": "Finalize Aggregate  (cost=19294.40..19294.41 rows=1 width=32) (actual time=42.107..45.504 rows=1 loops=1)"
+  },
+  {
+    "QUERY PLAN": "  ->  Gather  (cost=19294.18..19294.39 rows=2 width=32) (actual time=41.992..45.491 rows=3 loops=1)"
+  },
+  {
+    "QUERY PLAN": "        Workers Planned: 2"
+  },
+  {
+    "QUERY PLAN": "        Workers Launched: 2"
+  },
+  {
+    "QUERY PLAN": "        ->  Partial Aggregate  (cost=18294.18..18294.19 rows=1 width=32) (actual time=38.996..38.997 rows=1 loops=3)"
+  },
+  {
+    "QUERY PLAN": "              ->  Parallel Seq Scan on lineitem  (cost=0.00..18270.36 rows=4763 width=12) (actual time=0.035..37.885 rows=3873 loops=3)"
+  },
+  {
+    "QUERY PLAN": "                    Filter: ((l_shipdate >= '1994-01-01'::date) AND (l_shipdate < '1995-01-01 00:00:00'::timestamp without time zone) AND (l_discount >= 0.05) AND (l_discount <= 0.07) AND (l_quantity < '24'::numeric))"
+  },
+  {
+    "QUERY PLAN": "                    Rows Removed by Filter: 196318"
+  },
+  {
+    "QUERY PLAN": "Planning Time: 0.709 ms"
+  },
+  {
+    "QUERY PLAN": "Execution Time: 45.609 ms"
+  }
+]

@@ -1,0 +1,101 @@
+[
+  {
+    "QUERY PLAN": "Limit  (cost=22796.47..22796.50 rows=10 width=48) (actual time=128.981..131.207 rows=10 loops=1)"
+  },
+  {
+    "QUERY PLAN": "  ->  Sort  (cost=22796.47..22878.18 rows=32684 width=48) (actual time=128.979..131.205 rows=10 loops=1)"
+  },
+  {
+    "QUERY PLAN": "        Sort Key: (sum((lineitem.l_extendedprice * ('1'::numeric - lineitem.l_discount)))) DESC, orders.o_orderdate"
+  },
+  {
+    "QUERY PLAN": "        Sort Method: top-N heapsort  Memory: 26kB"
+  },
+  {
+    "QUERY PLAN": "        ->  Finalize GroupAggregate  (cost=21393.24..22090.18 rows=32684 width=48) (actual time=127.582..130.857 rows=1216 loops=1)"
+  },
+  {
+    "QUERY PLAN": "              Group Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority"
+  },
+  {
+    "QUERY PLAN": "              ->  Sort  (cost=21393.24..21441.31 rows=19226 width=48) (actual time=127.573..129.870 rows=1216 loops=1)"
+  },
+  {
+    "QUERY PLAN": "                    Sort Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority"
+  },
+  {
+    "QUERY PLAN": "                    Sort Method: quicksort  Memory: 182kB"
+  },
+  {
+    "QUERY PLAN": "                    ->  Gather  (cost=17862.31..20025.24 rows=19226 width=48) (actual time=126.651..129.467 rows=1216 loops=1)"
+  },
+  {
+    "QUERY PLAN": "                          Workers Planned: 1"
+  },
+  {
+    "QUERY PLAN": "                          Workers Launched: 1"
+  },
+  {
+    "QUERY PLAN": "                          ->  Partial HashAggregate  (cost=16862.31..17102.64 rows=19226 width=48) (actual time=123.146..123.468 rows=608 loops=2)"
+  },
+  {
+    "QUERY PLAN": "                                Group Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority"
+  },
+  {
+    "QUERY PLAN": "                                Batches: 1  Memory Usage: 1041kB"
+  },
+  {
+    "QUERY PLAN": "                                Worker 0:  Batches: 1  Memory Usage: 1041kB"
+  },
+  {
+    "QUERY PLAN": "                                ->  Nested Loop  (cost=602.81..16573.92 rows=19226 width=28) (actual time=5.409..120.843 rows=1660 loops=2)"
+  },
+  {
+    "QUERY PLAN": "                                      ->  Hash Join  (cost=602.39..4665.89 rows=8891 width=16) (actual time=5.099..32.753 rows=7612 loops=2)"
+  },
+  {
+    "QUERY PLAN": "                                            Hash Cond: (orders.o_custkey = customer.c_custkey)"
+  },
+  {
+    "QUERY PLAN": "                                            ->  Parallel Seq Scan on orders  (cost=0.00..3950.94 rows=42869 width=20) (actual time=0.033..20.510 rows=36339 loops=2)"
+  },
+  {
+    "QUERY PLAN": "                                                  Filter: (o_orderdate < '1995-03-15'::date)"
+  },
+  {
+    "QUERY PLAN": "                                                  Rows Removed by Filter: 38661"
+  },
+  {
+    "QUERY PLAN": "                                            ->  Hash  (cost=563.50..563.50 rows=3111 width=4) (actual time=5.022..5.022 rows=3111 loops=2)"
+  },
+  {
+    "QUERY PLAN": "                                                  Buckets: 4096  Batches: 1  Memory Usage: 142kB"
+  },
+  {
+    "QUERY PLAN": "                                                  ->  Seq Scan on customer  (cost=0.00..563.50 rows=3111 width=4) (actual time=0.018..4.337 rows=3111 loops=2)"
+  },
+  {
+    "QUERY PLAN": "                                                        Filter: ((c_mktsegment)::text = 'BUILDING'::text)"
+  },
+  {
+    "QUERY PLAN": "                                                        Rows Removed by Filter: 11889"
+  },
+  {
+    "QUERY PLAN": "                                      ->  Index Scan using lineitem_pk on lineitem  (cost=0.42..1.31 rows=3 width=16) (actual time=0.011..0.011 rows=0 loops=15224)"
+  },
+  {
+    "QUERY PLAN": "                                            Index Cond: (l_orderkey = orders.o_orderkey)"
+  },
+  {
+    "QUERY PLAN": "                                            Filter: (l_shipdate > '1995-03-15'::date)"
+  },
+  {
+    "QUERY PLAN": "                                            Rows Removed by Filter: 4"
+  },
+  {
+    "QUERY PLAN": "Planning Time: 120.693 ms"
+  },
+  {
+    "QUERY PLAN": "Execution Time: 132.268 ms"
+  }
+]
