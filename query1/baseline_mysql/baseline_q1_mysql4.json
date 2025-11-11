@@ -1,0 +1,5 @@
+[
+  {
+    "EXPLAIN": "-> Sort: LINEITEM.L_RETURNFLAG, LINEITEM.L_LINESTATUS  (actual time=762..762 rows=4 loops=1)\n    -> Table scan on <temporary>  (actual time=762..762 rows=4 loops=1)\n        -> Aggregate using temporary table  (actual time=762..762 rows=4 loops=1)\n            -> Filter: (LINEITEM.L_SHIPDATE <= <cache>((DATE'1998-12-01' - interval '90' day)))  (cost=59187 rows=185965) (actual time=2.46..394 rows=591856 loops=1)\n                -> Table scan on LINEITEM  (cost=59187 rows=557950) (actual time=2.45..349 rows=600572 loops=1)\n"
+  }
+]
