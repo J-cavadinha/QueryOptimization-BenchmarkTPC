@@ -1,4 +1,4 @@
-EXPLAIN (ANALYZE, FORMAT JSON)
+EXPLAIN ANALYZE
 SELECT
     c_name,
     c_custkey,
@@ -18,10 +18,6 @@ WHERE
     AND c_custkey = o_custkey
     AND o_orderkey = l_orderkey
 GROUP BY
-    c_name,
-    c_custkey,
-    o_orderkey,
-    o_orderdate,
-    o_totalprice
+    c_name, c_custkey, o_orderkey, o_orderdate, o_totalprice
 ORDER BY
     o_totalprice DESC, o_orderdate

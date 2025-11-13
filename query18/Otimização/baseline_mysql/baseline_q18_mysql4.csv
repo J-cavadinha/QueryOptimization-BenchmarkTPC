@@ -1,0 +1,17 @@
+EXPLAIN
+"-> Sort: O.O_TOTALPRICE DESC, O.O_ORDERDATE  (actual time=280..280 rows=5 loops=1)
+    -> Table scan on <temporary>  (actual time=280..280 rows=5 loops=1)
+        -> Aggregate using temporary table  (actual time=280..280 rows=5 loops=1)
+            -> Nested loop inner join  (cost=1.51e+6 rows=557950) (actual time=280..280 rows=35 loops=1)
+                -> Nested loop inner join  (cost=1.24e+6 rows=137062) (actual time=280..280 rows=5 loops=1)
+                    -> Nested loop inner join  (cost=682789 rows=137062) (actual time=280..280 rows=5 loops=1)
+                        -> Table scan on BIG_ORDERS  (cost=127300..129016 rows=137062) (actual time=280..280 rows=5 loops=1)
+                            -> Materialize  (cost=127300..127300 rows=137062) (actual time=280..280 rows=5 loops=1)
+                                -> Filter: (sum(LINEITEM.L_QUANTITY) > 300)  (cost=113594 rows=137062) (actual time=3.43..280 rows=5 loops=1)
+                                    -> Group aggregate: sum(LINEITEM.L_QUANTITY)  (cost=113594 rows=137062) (actual time=1.17..274 rows=150000 loops=1)
+                                        -> Index scan on LINEITEM using PRIMARY  (cost=57799 rows=557950) (actual time=1.17..222 rows=600572 loops=1)
+                        -> Filter: (O.O_CUSTKEY is not null)  (cost=0.968 rows=1) (actual time=0.0177..0.0178 rows=1 loops=5)
+                            -> Single-row index lookup on O using PRIMARY (O_ORDERKEY=BIG_ORDERS.L_ORDERKEY)  (cost=0.968 rows=1) (actual time=0.0173..0.0173 rows=1 loops=5)
+                    -> Single-row index lookup on C using PRIMARY (C_CUSTKEY=O.O_CUSTKEY)  (cost=0.98 rows=1) (actual time=0.0138..0.0139 rows=1 loops=5)
+                -> Index lookup on L using PRIMARY (L_ORDERKEY=BIG_ORDERS.L_ORDERKEY)  (cost=0.378 rows=4.07) (actual time=0.0108..0.0143 rows=7 loops=5)
+"
