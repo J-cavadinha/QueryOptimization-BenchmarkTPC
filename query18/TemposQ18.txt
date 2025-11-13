@@ -1,0 +1,18 @@
+ORIGINAL Q18		
+			
+Postgre			                        MySQL
+Execution Time: 432.290 ms			actual time=717..717
+Execution Time: 394.654 ms			actual time=482..482
+Execution Time: 392.898 ms			actual time=714..714
+Execution Time: 397.312 ms			actual time=479..479
+Execution Time: 395.607 ms			actual time=732..732
+			
+			
+OTIMIZADO Q18			
+			
+Postgre			                         MySQL
+Execution Time: 400.385 ms			actual time=335..335
+Execution Time: 385.332 ms			actual time=301..301
+Execution Time: 387.354 ms			actual time=279..279
+Execution Time: 383.718 ms			actual time=280..280
+Execution Time: 392.128 ms			actual time=281..281
