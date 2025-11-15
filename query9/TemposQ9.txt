@@ -1,0 +1,18 @@
+ORIGINAL Q9
+			
+Postgre			                        MySQL
+Execution Time: 188.880 ms 			actual time= 421 ms
+Execution Time: 186.557 ms			actual time= 410 ms
+Execution Time: 187.358 ms 		    actual time= 421 ms 
+Execution Time: 186.299 ms 			actual time= 429 ms 
+Execution Time: 187.710 ms 		    actual time= 422 ms 
+			
+			
+OTIMIZADO Q9		
+			
+Postgre			                         MySQL
+Execution Time: 130.313 ms 			actual time= 435 ms
+Execution Time: 127.735 ms 			actual time= 437 ms
+Execution Time: 128.417 ms 		    actual time= 429 ms
+Execution Time: 126.380 ms			actual time= 439 ms
+Execution Time: 125.816 ms			actual time= 432 ms

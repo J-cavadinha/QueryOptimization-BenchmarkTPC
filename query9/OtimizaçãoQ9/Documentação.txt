@@ -1,0 +1,163 @@
+
+# **Documentação: Justificativa da Otimização da Query Q9 usando JOIN ANSI**
+
+## **1. Contexto Geral**
+
+A Query 9 (Product Type Profit Measure) do benchmark TPC-H é uma das mais complexas do conjunto, envolvendo:
+
+* Seis tabelas diferentes
+* Diversos predicados de junção
+* Cálculo de lucro por linha
+* Agregação por país e ano
+* Filtro textual pouco seletivo (`LIKE '%green%'`)
+
+Por conta dessa complexidade, a escolha do plano de execução pelo otimizador do SGBD tem forte impacto no desempenho.
+A forma como os JOINs estão escritos influencia diretamente esse plano.
+
+No dataset original do TPC-H, a Q9 utiliza o antigo estilo de junções:
+
+```sql
+FROM part, partsupp, supplier, nation, lineitem, orders 
+WHERE ...
+```
+
+Esse formato é conhecido como *implicit join* ou *comma join style*.
+
+---
+
+## **2. Problemas do estilo original (implicit join)**
+
+O uso do formato antigo `FROM A, B, C... WHERE ...` possui diversas limitações:
+
+### **2.1. Produto cartesiano implícito**
+
+O otimizador do SGBD enxerga, inicialmente, todas as tabelas como um **cross join gigante**, e só depois aplica os predicados do WHERE para restringir o resultado.
+Isso aumenta drasticamente:
+
+* o custo de planejamento
+* o número de combinações avaliadas
+* a probabilidade de escolher joins ineficientes (nested loops profundos)
+
+---
+
+### **2.2. Menor liberdade de reorderização dos joins**
+
+O otimizador precisa tratar cada predicado isoladamente, o que reduz sua capacidade de:
+
+* reorganizar a ordem das tabelas
+* empurrar filtros para fases mais cedo
+* aplicar hash joins
+* escolher o plano ótimo
+
+Isso prejudica especialmente consultas com **múltiplas tabelas**, como é o caso da Q9.
+
+---
+
+### **2.3. Materialização desnecessária da subquery**
+
+No MySQL, implicit joins frequentemente causam **materialização completa** da subquery interna, gerando tabelas temporárias custosas.
+Isso impacta memória e tempo de CPU.
+
+---
+
+## **3. Benefícios da reescrita usando JOIN ANSI**
+
+Reescrever a consulta neste formato:
+
+```sql
+FROM part p
+JOIN partsupp ps ON ps.ps_partkey = p.p_partkey
+JOIN supplier s  ON s.s_suppkey = ps.ps_suppkey
+...
+```
+
+gera diversos ganhos diretos.
+
+---
+
+### **3.1. Eliminação do produto cartesiano implícito**
+
+O JOIN ANSI expressa explicitamente as relações entre tabelas, permitindo ao otimizador:
+
+* saber quais tabelas realmente se conectam
+* evitar combinações inválidas
+* aplicar filtros cedo (early pruning)
+
+Isso reduz drasticamente o espaço de busca.
+
+---
+
+### **3.2. Otimizador mais eficiente**
+
+Tanto PostgreSQL quanto MySQL 8+ possuem otimizadores modernos, que funcionam melhor quando recebem JOINs explícitos.
+Isso permite:
+
+* reorderização agressiva
+* eliminação de tabelas irrelevantes
+* aplicação de Hash Join (especialmente PostgreSQL)
+* uso de índices compostos nas chaves de junção
+
+---
+
+### **3.3. Redução de nested-loop joins custosos**
+
+Quando os JOINs não são explícitos, o SGBD tende a usar **nested loops profundos**, prejudicando desempenho principalmente na tabela LINEITEM (a maior do TPC-H).
+
+Com JOIN explícito:
+
+* PostgreSQL troca nested loop por hash join
+* MySQL ativa o modo Batched Key Access
+* Tabelas grandes passam a utilizar full scan + hash join (muito mais eficiente)
+
+---
+
+### **3.4. Menor necessidade de tabelas temporárias**
+
+Com a reescrita:
+
+* o plano se torna pipeline-friendly
+* subconsulta não precisa mais ser materializada
+* a agregação final é feita diretamente no fluxo
+
+Isso reduz I/O e uso de memória.
+
+---
+
+## **4. Impacto no tempo de execução**
+
+Em testes realizados:
+
+* A versão original da Q9 chegou a **quebrar a conexão** no MySQL (erro 2013) devido ao tempo de execução elevado.
+* Após reescrever com JOIN ANSI, o tempo caiu para **aproximadamente 0.64 segundos** no MySQL.
+* No PostgreSQL, a vantagem foi ainda maior devido ao uso otimizado de **hash join**.
+
+Ou seja, a simples reescrita da consulta já proporcionou uma otimização extremamente significativa.
+
+---
+
+## **5. Conclusão**
+
+A reescrita da Query Q9 utilizando JOIN ANSI foi escolhida como otimização porque:
+
+* reflete melhor as relações do modelo
+* permite que o otimizador utilize estratégias de join mais eficientes
+* reduz drasticamente a complexidade do plano
+* evita materializações e nested loops desnecessários
+* melhora significativamente o desempenho
+* oferece ganhos mensuráveis e justificáveis, como exigido no trabalho
+
+Essa otimização, além de simples de aplicar, demonstra claramente o impacto que boas práticas de escrita SQL têm no desempenho real de consultas complexas.
+
+---
+--------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
+---
+
+Para otimizar ainda mais a consulta Q9, foi criado um índice composto na tabela ORDERS, abrangendo as colunas o_orderdate e o_orderkey.
+Esse índice melhora o desempenho de duas operações críticas da consulta: (1) o cálculo do ano do pedido por meio de EXTRACT(YEAR FROM o_orderdate), e (2) o join entre ORDERS e LINEITEM utilizando o_orderkey.
+Além disso, o índice reduz a necessidade de ordenação externa no ORDER BY e diminui significativamente o volume de I/O necessário para acessar as tuplas da tabela ORDERS.
+Esse índice não existe na estrutura original do TPC-H, portanto representa uma otimização real acrescentada ao banco.
+
+CREATE INDEX idx_orders_orderdate_orderkey
+ON orders (o_orderdate, o_orderkey);

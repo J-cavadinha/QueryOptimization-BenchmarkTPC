@@ -1,0 +1,18 @@
+EXPLAIN
+"-> Sort: N.N_NAME, O_YEAR DESC  (actual time=439..439 rows=175 loops=1)
+    -> Table scan on <temporary>  (actual time=439..439 rows=175 loops=1)
+        -> Aggregate using temporary table  (actual time=439..439 rows=175 loops=1)
+            -> Nested loop inner join  (cost=56799 rows=61231) (actual time=1.21..401 rows=34694 loops=1)
+                -> Nested loop inner join  (cost=33798 rows=61231) (actual time=1.2..268 rows=34694 loops=1)
+                    -> Nested loop inner join  (cost=10814 rows=8899) (actual time=1.08..63 rows=4656 loops=1)
+                        -> Nested loop inner join  (cost=7699 rows=8899) (actual time=1.07..54.6 rows=4656 loops=1)
+                            -> Nested loop inner join  (cost=4585 rows=8899) (actual time=1.05..41.9 rows=4656 loops=1)
+                                -> Filter: (P.P_NAME like '%green%')  (cost=2130 rows=2212) (actual time=0.784..19.4 rows=1164 loops=1)
+                                    -> Table scan on P  (cost=2130 rows=19911) (actual time=0.776..11.5 rows=20000 loops=1)
+                                -> Index lookup on PS using PRIMARY (PS_PARTKEY=P.P_PARTKEY)  (cost=0.707 rows=4.02) (actual time=0.0176..0.0188 rows=4 loops=1164)
+                            -> Filter: (S.S_NATIONKEY is not null)  (cost=0.25 rows=1) (actual time=0.00238..0.00247 rows=1 loops=4656)
+                                -> Single-row index lookup on S using PRIMARY (S_SUPPKEY=PS.PS_SUPPKEY)  (cost=0.25 rows=1) (actual time=0.00217..0.00219 rows=1 loops=4656)
+                        -> Single-row index lookup on N using PRIMARY (N_NATIONKEY=S.S_NATIONKEY)  (cost=0.25 rows=1) (actual time=0.00162..0.00164 rows=1 loops=4656)
+                    -> Index lookup on L using IDX_LINEITEM_PART_SUPP (L_PARTKEY=P.P_PARTKEY, L_SUPPKEY=PS.PS_SUPPKEY)  (cost=1.89 rows=6.88) (actual time=0.0365..0.0433 rows=7.45 loops=4656)
+                -> Single-row index lookup on O using PRIMARY (O_ORDERKEY=L.L_ORDERKEY)  (cost=0.276 rows=1) (actual time=0.00364..0.00366 rows=1 loops=34694)
+"

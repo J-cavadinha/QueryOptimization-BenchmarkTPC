@@ -1,0 +1,18 @@
+EXPLAIN
+"-> Sort: N.N_NAME, O_YEAR DESC  (actual time=429..429 rows=175 loops=1)
+    -> Table scan on <temporary>  (actual time=429..429 rows=175 loops=1)
+        -> Aggregate using temporary table  (actual time=429..429 rows=175 loops=1)
+            -> Nested loop inner join  (cost=56729 rows=61231) (actual time=0.988..392 rows=34694 loops=1)
+                -> Nested loop inner join  (cost=33871 rows=61231) (actual time=0.974..262 rows=34694 loops=1)
+                    -> Nested loop inner join  (cost=10808 rows=8899) (actual time=0.854..63.6 rows=4656 loops=1)
+                        -> Nested loop inner join  (cost=7694 rows=8899) (actual time=0.848..55.2 rows=4656 loops=1)
+                            -> Nested loop inner join  (cost=4579 rows=8899) (actual time=0.836..42 rows=4656 loops=1)
+                                -> Filter: (P.P_NAME like '%green%')  (cost=2130 rows=2212) (actual time=0.676..19.1 rows=1164 loops=1)
+                                    -> Table scan on P  (cost=2130 rows=19911) (actual time=0.668..11.2 rows=20000 loops=1)
+                                -> Index lookup on PS using PRIMARY (PS_PARTKEY=P.P_PARTKEY)  (cost=0.705 rows=4.02) (actual time=0.018..0.0192 rows=4 loops=1164)
+                            -> Filter: (S.S_NATIONKEY is not null)  (cost=0.25 rows=1) (actual time=0.00248..0.00257 rows=1 loops=4656)
+                                -> Single-row index lookup on S using PRIMARY (S_SUPPKEY=PS.PS_SUPPKEY)  (cost=0.25 rows=1) (actual time=0.00227..0.0023 rows=1 loops=4656)
+                        -> Single-row index lookup on N using PRIMARY (N_NATIONKEY=S.S_NATIONKEY)  (cost=0.25 rows=1) (actual time=0.00161..0.00163 rows=1 loops=4656)
+                    -> Index lookup on L using IDX_LINEITEM_PART_SUPP (L_PARTKEY=P.P_PARTKEY, L_SUPPKEY=PS.PS_SUPPKEY)  (cost=1.9 rows=6.88) (actual time=0.035..0.042 rows=7.45 loops=4656)
+                -> Single-row index lookup on O using PRIMARY (O_ORDERKEY=L.L_ORDERKEY)  (cost=0.273 rows=1) (actual time=0.00353..0.00355 rows=1 loops=34694)
+"

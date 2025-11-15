@@ -1,0 +1,18 @@
+EXPLAIN
+"-> Sort: PROFIT.NATION, PROFIT.O_YEAR DESC  (actual time=410..410 rows=175 loops=1)
+    -> Table scan on <temporary>  (actual time=409..409 rows=175 loops=1)
+        -> Aggregate using temporary table  (actual time=409..409 rows=175 loops=1)
+            -> Nested loop inner join  (cost=57217 rows=62350) (actual time=1.34..367 rows=34694 loops=1)
+                -> Nested loop inner join  (cost=33542 rows=62350) (actual time=1.33..244 rows=34694 loops=1)
+                    -> Nested loop inner join  (cost=10951 rows=8899) (actual time=0.736..61.1 rows=4656 loops=1)
+                        -> Nested loop inner join  (cost=7836 rows=8899) (actual time=0.731..53.2 rows=4656 loops=1)
+                            -> Nested loop inner join  (cost=4721 rows=8899) (actual time=0.721..39.9 rows=4656 loops=1)
+                                -> Filter: (PART.P_NAME like '%green%')  (cost=2190 rows=2212) (actual time=0.597..18.9 rows=1164 loops=1)
+                                    -> Table scan on PART  (cost=2190 rows=19911) (actual time=0.59..11.2 rows=20000 loops=1)
+                                -> Index lookup on PARTSUPP using PRIMARY (PS_PARTKEY=PART.P_PARTKEY)  (cost=0.742 rows=4.02) (actual time=0.0164..0.0176 rows=4 loops=1164)
+                            -> Filter: (SUPPLIER.S_NATIONKEY is not null)  (cost=0.25 rows=1) (actual time=0.00251..0.00261 rows=1 loops=4656)
+                                -> Single-row index lookup on SUPPLIER using PRIMARY (S_SUPPKEY=PARTSUPP.PS_SUPPKEY)  (cost=0.25 rows=1) (actual time=0.00233..0.00235 rows=1 loops=4656)
+                        -> Single-row index lookup on NATION using PRIMARY (N_NATIONKEY=SUPPLIER.S_NATIONKEY)  (cost=0.25 rows=1) (actual time=0.00149..0.00151 rows=1 loops=4656)
+                    -> Index lookup on LINEITEM using LINEITEM_FK1 (L_PARTKEY=PART.P_PARTKEY, L_SUPPKEY=PARTSUPP.PS_SUPPKEY)  (cost=1.84 rows=7.01) (actual time=0.0337..0.0387 rows=7.45 loops=4656)
+                -> Single-row index lookup on ORDERS using PRIMARY (O_ORDERKEY=LINEITEM.L_ORDERKEY)  (cost=0.28 rows=1) (actual time=0.00334..0.00336 rows=1 loops=34694)
+"
