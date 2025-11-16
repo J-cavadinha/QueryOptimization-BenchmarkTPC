@@ -1,0 +1,17 @@
+ORIGINAL Q1
+			
+Postgre			                        MySQL
+Execution Time: 301.859 ms 			actual time=793
+Execution Time: 287.432 ms			actual time=762
+Execution Time: 287.876 ms 		    actual time=714
+Execution Time: 280.153 ms 			actual time=715 
+Execution Time: 279.925 ms 		    actual time=713
+			
+OTIMIZADO Q1	
+			
+Postgre			                         MySQL
+Execution Time: 			actual time= 
+Execution Time: 		    actual time= 
+Execution Time:  		    actual time= 
+Execution Time: 			actual time= 
+Execution Time: 			actual time= 
