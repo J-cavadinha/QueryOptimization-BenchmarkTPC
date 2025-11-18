@@ -8,8 +8,8 @@
             "askForPassword": true,
             "driver": "PostgreSQL",
             "name": "127.0.0.1",
-            "database": "grupo10",
-            "username": "grupo10"
+            "database": "grupo8",
+            "username": "grupo8"
         },
         {
             "mysqlOptions": {
@@ -22,8 +22,8 @@
             "port": 3306,
             "driver": "MySQL",
             "name": "127.0.0.1",
-            "database": "grupo10",
-            "username": "grupo10",
+            "database": "grupo8",
+            "username": "grupo8",
             "askForPassword": true
         }
     ]

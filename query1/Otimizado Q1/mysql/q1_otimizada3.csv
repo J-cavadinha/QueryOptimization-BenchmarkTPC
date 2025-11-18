@@ -1,0 +1,7 @@
+"EXPLAIN"
+"-> Sort: LINEITEM.L_RETURNFLAG, LINEITEM.L_LINESTATUS  (actual time=652..652 rows=4 loops=1)
+    -> Table scan on <temporary>  (actual time=652..652 rows=4 loops=1)
+        -> Aggregate using temporary table  (actual time=652..652 rows=4 loops=1)
+            -> Filter: (LINEITEM.L_SHIPDATE <= <cache>((DATE'1998-12-01' - interval '90' day)))  (cost=59904 rows=291719) (actual time=0.97..321 rows=591856 loops=1)
+                -> Covering index range scan on LINEITEM using idx_q1_covering over (NULL < L_SHIPDATE <= '1998-09-02')  (cost=59904 rows=291719) (actual time=0.967..278 rows=591856 loops=1)
+"
