@@ -10,8 +10,8 @@ Execution Time: 279.925 ms 		    actual time=713
 OTIMIZADO Q1	
 			
 Postgre			                         MySQL
-Execution Time: 			actual time= 
-Execution Time: 		    actual time= 
-Execution Time:  		    actual time= 
-Execution Time: 			actual time= 
-Execution Time: 			actual time= 
+Execution Time: 268.240 ms 			actual time= 653
+Execution Time: 268.406 ms 		    actual time= 652
+Execution Time: 267.758 ms 		    actual time= 652
+Execution Time: 271.307 ms			actual time= 652
+Execution Time: 268.786 ms 			actual time= 653

@@ -11,8 +11,8 @@ Execution Time: 279.925 ms 		    actual time=713
 OTIMIZADO Q9		
 			
 Postgre			                         MySQL
-Execution Time: 			actual time=
-Execution Time: 			actual time= 
-Execution Time: 		    actual time= 
-Execution Time:      		actual time= 
-Execution Time: 			actual time= 
+Execution Time: 22.947 ms			actual time=101
+Execution Time: 26.942 ms			actual time=62 
+Execution Time: 28.495 ms		    actual time=64 
+Execution Time: 28.486 ms      		actual time=63.6 
+Execution Time: 28.486 ms			actual time=64 
