@@ -1,0 +1,5 @@
+"EXPLAIN"
+"-> Aggregate: sum((LINEITEM.L_EXTENDEDPRICE * LINEITEM.L_DISCOUNT))  (cost=35973 rows=1) (actual time=59.7..59.7 rows=1 loops=1)
+    -> Filter: ((LINEITEM.L_SHIPDATE >= DATE'1994-01-01') and (LINEITEM.L_SHIPDATE < <cache>((DATE'1994-01-01' + interval '1' year))) and (LINEITEM.L_DISCOUNT between <cache>((0.06 - 0.01)) and <cache>((0.06 + 0.01))) and (LINEITEM.L_QUANTITY < 24))  (cost=35334 rows=6391) (actual time=0.618..59 rows=7672 loops=1)
+        -> Covering index range scan on LINEITEM using idx_q1_covering over ('1994-01-01' <= L_SHIPDATE < '1995-01-01')  (cost=35334 rows=172584) (actual time=0.609..31.4 rows=92040 loops=1)
+"
