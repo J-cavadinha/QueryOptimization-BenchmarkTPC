@@ -1,18 +1,18 @@
 ORIGINAL Q6
 			
 Postgre			                        MySQL
-Execution Time: 45.309 ms			actual time=84.6
-Execution Time:	45.609 ms		    actual time=59.7
-Execution Time: 46.161 ms		    actual time=59.7
-Execution Time:	45.489 ms		    actual time=60
-Execution Time: 45.607 ms		    actual time=59.6    
+Execution Time: 46.605			actual time= 294
+Execution Time:	46.684		    actual time= 280
+Execution Time: 52.370 		    actual time= 277
+Execution Time:	52.040		    actual time= 278
+Execution Time: 46.510		    actual time= 278
 			
 			
 OTIMIZADO Q6		
 			
 Postgre			                         MySQL
-Execution Time: 22.947 ms			actual time=101
-Execution Time: 26.942 ms			actual time=62 
-Execution Time: 28.495 ms		    actual time=64 
-Execution Time: 28.486 ms      		actual time=63.6 
-Execution Time: 28.486 ms			actual time=64 
+Execution Time: 24.781 			actual time= 56
+Execution Time: 20.106 			actual time= 54
+Execution Time: 20.094		    actual time= 54
+Execution Time: 20.101      	actual time= 55
+Execution Time: 20.088			actual time= 54

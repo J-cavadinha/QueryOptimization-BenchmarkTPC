@@ -1,0 +1,13 @@
+"EXPLAIN"
+"-> Limit: 10 row(s)  (actual time=203..203 rows=10 loops=1)
+    -> Sort: revenue DESC, ORDERS.O_ORDERDATE, limit input to 10 row(s) per chunk  (actual time=203..203 rows=10 loops=1)
+        -> Table scan on <temporary>  (actual time=203..203 rows=1216 loops=1)
+            -> Aggregate using temporary table  (actual time=203..203 rows=1216 loops=1)
+                -> Nested loop inner join  (cost=33152 rows=30833) (actual time=0.207..199 rows=3321 loops=1)
+                    -> Nested loop inner join  (cost=16553 rows=23179) (actual time=0.154..72.6 rows=15224 loops=1)
+                        -> Covering index lookup on CUSTOMER using idx_customer_mktsegment_custkey (C_MKTSEGMENT='BUILDING')  (cost=328 rows=3111) (actual time=0.117..1.82 rows=3111 loops=1)
+                        -> Filter: (ORDERS.O_ORDERDATE < DATE'1995-03-15')  (cost=3.73 rows=7.45) (actual time=0.0172..0.0224 rows=4.89 loops=3111)
+                            -> Index lookup on ORDERS using ORDERS_FK (O_CUSTKEY=CUSTOMER.C_CUSTKEY)  (cost=3.73 rows=14.9) (actual time=0.0168..0.0212 rows=10 loops=3111)
+                    -> Filter: (LINEITEM.L_SHIPDATE > DATE'1995-03-15')  (cost=0.317 rows=1.33) (actual time=0.00793..0.00811 rows=0.218 loops=15224)
+                        -> Index lookup on LINEITEM using PRIMARY (L_ORDERKEY=ORDERS.O_ORDERKEY)  (cost=0.317 rows=3.99) (actual time=0.00625..0.00766 rows=4.02 loops=15224)
+"
